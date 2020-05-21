@@ -5,9 +5,9 @@ const bodyParser = require("body-parser");
 
 const rawdataRoute = require("./rawdataAPIv1");
 const batchDataRoute = require("./batchdata");
-const dataAggregationRoute = require('./aggData');
+//const dataAggregationRoute = require('./aggData');
 const dashboardDataRoute = require('./dashboard.data')
-const analysisDataRoute = require('./analysis');
+//const analysisDataRoute = require('./analysis');
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -55,9 +55,9 @@ app.use((req, res, next) => {
 
 
 app.use("/rawdata", rawdataRoute);
-app.use("/agg", dataAggregationRoute);
+//app.use("/agg", dataAggregationRoute);
 app.use("/dash", dashboardDataRoute);
 app.use("/batch", batchDataRoute);
-app.use("/ana", analysisDataRoute);
+//app.use("/ana", analysisDataRoute);
 
 module.exports=app;

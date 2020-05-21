@@ -1,7 +1,8 @@
-const rawData = require('./rawdata.schema');
-const dashboardSchema = require('./dashboard.data')
 const express = require("express");
 const rawdataRouter = express.Router();
+
+const rawData = require('./rawdata.schema');
+const CWDataSchema = require('./countrywide.schema');
 
 //the 'request' module used to call an API from another API 
 const request = require('request-promise');
@@ -23,6 +24,14 @@ numberOfRows=0;
 
 rawdataRouter.get('', (req, res) => {
     var currentDataBatch = 4
+    var CWAggData = [];
+
+    const aggCW = rawData.aggregate(
+        [
+          {$group: {_id: {stateCode:"$statecode", currStatus:"$currentstatus"}, totalCases: {$sum: "$numcases"} }}
+        ]
+      );
+
     var requestOptions = {
         uri: covid19DataURLs[currentDataBatch],
         headers: {
@@ -56,10 +65,46 @@ rawdataRouter.get('', (req, res) => {
                     console.log("total records inserted into raw data collection: ", docs.length);
                     //docs is the actual array of docs that are inserted.
                     //So using 'length' to get the number of records inserted.
+
+                    //once the raw records are inserted, do the aggregation updates
+                    aggCW.exec((err, aggResults) => {
+                        if(err) {
+                          throw(err)
+                        } else {
+                          aggResults.forEach(aggResult => {
+                            var stateData = { 
+                                stateCode:  aggResult._id.stateCode, 
+                                currStatus: aggResult._id.currStatus, 
+                                totalCases: aggResult.totalCases
+                              }
+                            CWAggData.push(stateData);
+                          });
+                          CWDataSchema.deleteMany({}, (err, delResults)=>{
+                            if(err) throw(err);
+                            console.log('Number of docs deleted from CW table: ', delResults.n);
+                          });
+                          //insert new docs in the countrylevel collection
+                          CWDataSchema.insertMany(CWAggData, (err, docs) => {
+                            if(err){throw(err)} 
+                            else { 
+                                console.log('Number of docs inserted from CW table: ', docs.length);
+                                res.status(201).json({message: "raw data inserted and summary tables updated."});
+                            }
+
+                          });
+                        }
+                      });
                 }
             })
+
+            //do the agg data insert here?
+            
+            
+              
+
         })
     .catch(function(err) {console.log("api call failed:", err)});
+    
 });
 
 
