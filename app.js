@@ -4,7 +4,7 @@ const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
 
 const ingestDataRoute = require('./ingestData.v3');
-const stateNamesRoute = require('./stateNames');
+
 
 
 //const rawdataRoute = require("./rawdataAPIv1");
@@ -12,9 +12,9 @@ const stateNamesRoute = require('./stateNames');
 //const historicalDataRoute = require('./historicalDataRouter');
 const histStateDashboardRoute  = require('./dash.histstatedata.v1');
 //const dataAggregationRoute = require('./aggData');
-const dashboardDataRoute = require('./dashboard.data.v1')
+const dashboardDataRoute = require('./dashboard.data.v2')
 //const analysisDataRoute = require('./analysis');
-const stateDataRoute = require('./readStateData');
+
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -68,8 +68,7 @@ app.use("/dashhist", histStateDashboardRoute);
 //app.use("/hist", historicalDataRoute);
 //app.use("/batch", batchDataRoute);
 //app.use("/ana", analysisDataRoute);
-app.use("/state", stateDataRoute);
-app.use("/statenames", stateNamesRoute);
+
 
 
 module.exports=app;

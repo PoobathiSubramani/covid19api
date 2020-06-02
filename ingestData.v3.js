@@ -4,6 +4,7 @@ const request = require("request-promise");
 const covid19DetailDataSchema = require('./schemaCovid19Data');
 const aggStateLevelSchema = require('./schemaCWSummary');
 const aggHistStateLevelSchema = require('./schemaHistCWSummary');
+const stateLookupSchema = require('./schemaStateLookup');
 
 ingestDataRouter.get('', (req, res) => {
 
@@ -48,6 +49,7 @@ ingestDataRouter.get('', (req, res) => {
         res.status(201).json({message: "Data ingestion completed.", URLs: dataURLs});
     }
     asyncHandler();
+    insertStateLookupData(stateLookupSchema);
 })
 
 async function iteratorFunction(dataURLs, startingBatchNumber) {
@@ -250,19 +252,7 @@ async function clearCollection(schema) {
         })
     })
 }
-/*
-async function clearStateLevelCollection(schema) {
-    return new Promise((resolve, reject) => {
-        schema.deleteMany({}, (err, deletedRecords) => {
-            if(!err) {
-                resolve(deletedRecords.n);
-            } else {
-                reject(err)
-            }
-        })
-    })
-}
-*/
+
 
 async function insertAggData(schema, data) {
     return new Promise((resolve, reject) => {
@@ -274,6 +264,63 @@ async function insertAggData(schema, data) {
             }
         });
     });
+}
+
+
+async function insertStateLookupData(schema) {
+    const stateLookupData = await stateLookupDataContainer();
+    schema.find({}, (err, result) => {
+        if(err) {
+            console.log('error in state lookup table query', err)
+        } else if(result.length === 736) {
+            console.log('state table has data');
+        } else {
+            console.log('state table do not have right data. need to refresh. n=',result.length);
+            schema.deleteMany({}, (err, deletedRecords) => {
+                if(err) {console.log('error during deleting state look up table.', err)}
+                else {
+                    console.log('Records deleted from state table. n=', deletedRecords.n);
+                    schema.insertMany(stateLookupData, (err, insertedRecords) => {
+                        if(!err) {
+                            console.log('records inserted into state lookup table. n=', insertedRecords.length);
+                        } else {
+                            console.log('error during state look up insertion', err);
+                        }
+                    })
+                }
+                
+            })
+            
+        }
+    })
+}
+
+function stateLookupDataContainer() {
+    return stateLookupData = [
+        {state:'Andaman and Nicobar',statecode:'AN',district:'Nicobar'},
+        {state:'Andaman and Nicobar',statecode:'AN',district:'North Middle Andaman'},
+        {state:'Andaman and Nicobar',statecode:'AN',district:'South Andaman'},
+        {state:'Andhra Pradesh',statecode:'AP',district:'Anantapur'},
+        {state:'Andhra Pradesh',statecode:'AP',district:'Chittoor'},
+        {state:'Andhra Pradesh',statecode:'AP',district:'East Godavari'},
+        {state:'Andhra Pradesh',statecode:'AP',district:'Guntur'},
+        {state:'Andhra Pradesh',statecode:'AP',district:'Kadapa'},
+        {state:'Andhra Pradesh',statecode:'AP',district:'Krishna'},
+        {state:'Andhra Pradesh',statecode:'AP',district:'Kurnool'},
+        {state:'Andhra Pradesh',statecode:'AP',district:'Nellore'},
+        {state:'Andhra Pradesh',statecode:'AP',district:'Prakasam'},
+        {state:'Andhra Pradesh',statecode:'AP',district:'Srikakulam'},
+        {state:'Andhra Pradesh',statecode:'AP',district:'Visakhapatnam'},
+        {state:'Andhra Pradesh',statecode:'AP',district:'Vizianagaram'},
+        {state:'Andhra Pradesh',statecode:'AP',district:'West Godavari'},
+        {state:'Arunachal Pradesh',statecode:'AR',district:'Anjaw'},
+        {state:'Arunachal Pradesh',statecode:'AR',district:'Central Siang'},
+        {state:'Arunachal Pradesh',statecode:'AR',district:'Changlang'},
+        {state:'Arunachal Pradesh',statecode:'AR',district:'Dibang Valley'},
+        {state:'Arunachal Pradesh',statecode:'AR',district:'East Kameng'},
+        {state:'Arunachal Pradesh',statecode:'AR',district:'East Siang'},
+        {state:'Arunachal Pradesh',statecode:'AR',district:'Kamle'}
+    ];
 }
 
 module.exports = ingestDataRouter;
