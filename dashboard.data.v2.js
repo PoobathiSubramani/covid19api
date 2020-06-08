@@ -202,8 +202,8 @@ async function formatResultsDetails(dashData) {
   const cleanedDataPromises = await dashData.map(async dataRow => {
     return (
         {
-        //name: dataRow._id.name.toLowerCase(), 
-        name: dataRow._id.name.charAt(0).toUpperCase() + dataRow._id.name.slice(1).toLowerCase(),
+        name: dataRow._id.name, 
+        //name: dataRow._id.name.charAt(0).toUpperCase() + dataRow._id.name.slice(1).toLowerCase(),
         //currentstatus: dataRow._id.status,
         confirmedCases: dataRow.cases                
         }
