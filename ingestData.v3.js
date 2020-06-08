@@ -153,8 +153,11 @@ async function cleanApiData(rawApiData, i) {
                 date: myDateString,
                 //date: rawApiDataRow.dateannounced,
                 statecode: rawApiDataRow.statecode, 
-                district: rawApiDataRow.detecteddistrict,
-                city: rawApiDataRow.detectedcity,
+                //district: rawApiDataRow.detecteddistrict,
+                district: rawApiDataRow.detecteddistrict.charAt(0).toUpperCase() + rawApiDataRow.detecteddistrict.slice(1).toLowerCase(),
+                //name: dataRow._id.name.charAt(0).toUpperCase() + dataRow._id.name.slice(1).toLowerCase(),
+                //city: rawApiDataRow.detectedcity,
+                city: rawApiDataRow.detectedcity.charAt(0).toUpperCase() + rawApiDataRow.detectedcity.slice(1).toLowerCase(),
                 currentstatus: rawApiDataRow.currentstatus,
                 cases: rawApiDataRow.numcases                
             }
