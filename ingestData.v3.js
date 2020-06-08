@@ -13,7 +13,8 @@ ingestDataRouter.get('', (req, res) => {
         "https://api.covid19india.org/raw_data2.json", //archive
         "https://api.covid19india.org/raw_data3.json", //archive
         "https://api.covid19india.org/raw_data4.json", //archive
-        "https://api.covid19india.org/raw_data5.json"
+        "https://api.covid19india.org/raw_data5.json", //archive
+        "https://api.covid19india.org/raw_data6.json"
     ];
 
     async function asyncHandler() {
