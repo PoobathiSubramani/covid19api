@@ -22,11 +22,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 dbConnectionStatus = "not connected to DB";
 
-dbConnectionString = "mongodb+srv://"+
+dbConnectionString = "mongodb://"+
 process.env.MONGODB_DBUSER+":"+
 process.env.MONGODB_DBPWD+"@"+
 process.env.MONGODB_CLUSTER+"/"+
-process.env.MONGODB_DBNAME+"?"+"retryWrites=true&w=majority";
+process.env.MONGODB_DBNAME+"?"+"ssl=true&"+"retryWrites=true&w=majority";
 //"@boomongocluster-rcqr2.azure.mongodb.net/node-angular?retryWrites=true&w=majority"
 
 //dbConnectionString = "mongodb+srv://dbuser:dbpwd09@boomongocluster-rcqr2.azure.mongodb.net/covid19db";//?retryWrites=true&w=majority"
