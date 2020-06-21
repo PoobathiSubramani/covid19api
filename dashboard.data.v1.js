@@ -35,11 +35,12 @@ async function asyncHandler() {
   const stateSummaryFormatted = await formatResults(stateSummary);
   console.log("state summary results", stateSummaryFormatted);
 
+  //CW data
   if(stateParam) {filterState = {statecode: stateParam}} else {filterState = {}}
   cwSummaryQuery = [{$match: filterState}, {$group: {_id: {status: "$currentstatus"}, cases: {$sum: "$cases"}}}]
   const cwSummaryResultsPromise = await dashboardData(CWDataSchema, cwSummaryQuery)
   const cwSummary = await Promise.all(cwSummaryResultsPromise);
-  console.log("cw resulsts: ", cwSummary);
+  //console.log("cw resulsts: ", cwSummary);
   const cwSummaryFormatted = await formatResultsCW(cwSummary);
   console.log("cw results", cwSummaryFormatted);
 

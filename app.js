@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
+require('dotenv').config();
 
 const ingestDataRoute = require('./ingestData.v3');
 
@@ -28,7 +29,7 @@ process.env.MONGODB_CLUSTER+"/"+
 process.env.MONGODB_DBNAME+"?"+"retryWrites=true&w=majority";
 //"@boomongocluster-rcqr2.azure.mongodb.net/node-angular?retryWrites=true&w=majority"
 
-dbConnectionString = "mongodb+srv://dbuser:dbpwd09@boomongocluster-rcqr2.azure.mongodb.net/covid19db";//?retryWrites=true&w=majority"
+//dbConnectionString = "mongodb+srv://dbuser:dbpwd09@boomongocluster-rcqr2.azure.mongodb.net/covid19db";//?retryWrites=true&w=majority"
 
 mongoose
   .connect(
