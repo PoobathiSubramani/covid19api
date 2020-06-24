@@ -22,7 +22,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 
 dbConnectionStatus = "not connected to DB";
 
-dbConnectionString = "mongodb://"+
+dbConnectionString = "mongodb+srv://"+
 process.env.MONGODB_DBUSER+":"+
 process.env.MONGODB_DBPWD+"@"+
 process.env.MONGODB_CLUSTER+"/"+
