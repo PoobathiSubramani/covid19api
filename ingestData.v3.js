@@ -9,12 +9,13 @@ const stateLookupSchema = require('./schemaStateLookup');
 ingestDataRouter.get('', (req, res) => {
 
     var dataURLs = [
-        "https://api.covid19india.org/raw_data1.json", //archive
-        "https://api.covid19india.org/raw_data2.json", //archive
-        "https://api.covid19india.org/raw_data3.json", //archive
-        "https://api.covid19india.org/raw_data4.json", //archive
-        "https://api.covid19india.org/raw_data5.json", //archive
-        "https://api.covid19india.org/raw_data6.json"
+        "https://api.covid19india.org/raw_data1.json", //archive till 2020/04/19
+        "https://api.covid19india.org/raw_data2.json", //archive till 2020/04/26
+        "https://api.covid19india.org/raw_data3.json", //archive till 2020/05/09
+        "https://api.covid19india.org/raw_data4.json", //archive till 2020/05/23
+        "https://api.covid19india.org/raw_data5.json", //archive till 2020/06/04
+        "https://api.covid19india.org/raw_data6.json", //archive till 2020/06/19
+        "https://api.covid19india.org/raw_data7.json", //current
     ];
 
     async function asyncHandler() {
